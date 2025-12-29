@@ -7,7 +7,7 @@ import { FucsiaButton } from "ui/buttons";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-export function Header() {
+export function HeaderSearch() {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -17,18 +17,11 @@ export function Header() {
   function closeMenu() {
     setMenuOpen(false);
   }
-  function closeSession() {
-    // lógica para cerrar sesión y enviar a otra page
-    setIsLoggedIn(false);
-    closeMenu();
-  }
 
   return (
     <header className="w-[100%] h-[84px] bg-[black] ">
       <div className="px-[20px] flex justify-between items-center w-[100%] h-[100%] relative ">
-        <Link href="/">
-          <ShoppingCartIcon className="text-[white]" />
-        </Link>
+        <ShoppingCartIcon className="text-[white]" />
         {isLoggedIn ? (
           <button onClick={openMenu}>
             <MenuButtonIcon className="text-[white]" />
@@ -46,20 +39,20 @@ export function Header() {
           </div>
           <div className="flex flex-col gap-[50px] text-center">
             <Link href="/signin" passHref>
-              <SubTitle onClick={closeMenu}>ingresar</SubTitle>
+              <SubTitle>ingresar</SubTitle>
             </Link>
             <Link href="/profile" passHref>
-              <SubTitle onClick={closeMenu}>Mi perfil</SubTitle>
+              <SubTitle>Mi perfil</SubTitle>
             </Link>
             <Link href="/search" passHref>
-              <SubTitle onClick={closeMenu}>Buscar</SubTitle>
+              <SubTitle>Buscar</SubTitle>
             </Link>
           </div>
           <div className="flex flex-col gap-[20px] text-center">
             <Body>miEmail@email</Body>
-            <LargeText className="text-[var(--fucsia-A200)]" onClick={closeSession}>
-              Cerrar sesión
-            </LargeText>
+            <Link href="/" passHref>
+              <LargeText className="text-[var(--fucsia-A200)]">Cerrar sesión</LargeText>
+            </Link>
           </div>
         </div>
       )}

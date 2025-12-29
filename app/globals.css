@@ -1,15 +1,15 @@
 @import "tailwindcss";
 
 * {
-	box-sizing: border-box;
+  box-sizing: border-box;
 }
 :root {
-	--azul-800: #4f7cac;
-	--celeste-A100: #91e5f6;
-	--amarillo-700: #ffc700;
-	--azul-900: #201e50;
-	--fucsia-A200: #e75a7c;
+  --azul-800: #4f7cac;
+  --celeste-A100: #91e5f6;
+  --amarillo-700: #ffc700;
+  --azul-900: #201e50;
+  --fucsia-A200: #e75a7c;
 }
 body {
-	margin: 10px;
+  /* margin: 10px; */
 }
