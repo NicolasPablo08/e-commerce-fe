@@ -104,3 +104,15 @@ export function useFeaturedProducts() {
 	const destacados = sampleSize(data?.results, 2);
 	return destacados;
 }
+
+//obtener los productos del carrito
+export function useGetProductsToCart() {
+	const { data, error, isLoading } = useSWR("/cart", fetchApi);
+	return { data, error, isLoading };
+}
+
+//obtener los carros pendientes y finalizados
+export function useGetOldsCart() {
+	const { data, error, isLoading } = useSWR("/cart/history", fetchApi);
+	return { data, error, isLoading };
+}

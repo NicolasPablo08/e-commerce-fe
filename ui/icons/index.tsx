@@ -3,6 +3,7 @@ import TwitterFooterSVG from "./twitter_footer.svg";
 import MenuButtonSVG from "./menu_header.svg";
 import ShoppingCartSVG from "./shopping-cart-icon.svg";
 import LinkedinSVG from "./linkedin-icon.svg";
+import DeleteSVG from "./delete-icon.svg";
 
 export function ShoppingCartIcon({ className }: { className?: string }) {
 	return <ShoppingCartSVG className={` ${className}`} />;
@@ -24,4 +25,8 @@ export function LinkedinIcon({ className }: { className?: string }) {
 
 export function MenuButtonIcon({ className }: { className?: string }) {
 	return <MenuButtonSVG className={`w-[52px] h-[40px] ${className}`} />;
+}
+
+export function DeleteIcon({ className }: { className?: string }) {
+	return <DeleteSVG className={`w-[19px] h-[23px] ${className}`} />;
 }

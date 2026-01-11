@@ -5,12 +5,16 @@ import { SubTitle, Body, BodyBold } from "ui/typography";
 import { useState } from "react";
 import { CartCard } from "components/card";
 import { BlueButton } from "ui/buttons";
+import { useGetProductsToCart } from "lib/hooks";
+
 export default function CartPage() {
-	const [productsForShipping, setProductsForShipping] = useState(true);
-	const products = ["jean", "campera", "blusa"];
-	const total = "1000";
+	const { data, error, isLoading } = useGetProductsToCart();
+	const totalToPay = (data || []).reduce((total: number, product: any) => {
+		return total + product.quantity * product.amount;
+	}, 0);
+	console.log(totalToPay);
 	function handlePurcharse() {
-		console.log("enlace a mercadopago");
+		console.log("finalizar compra0", data[0].cartId);
 	}
 	return (
 		<div>
@@ -18,13 +22,19 @@ export default function CartPage() {
 			<div className="px-[20px] pt-[60px] pb-[100px] flex flex-col gap-[20px]">
 				<SubTitle>Carrito de compras</SubTitle>
 				<div>
-					{productsForShipping ? (
+					{data ? (
 						<div className="flex flex-col gap-[15px]">
-							{products.map((p) => (
-								<CartCard title={p} />
+							{data.map((p: any) => (
+								<CartCard
+									key={p.objectID}
+									title={p.name}
+									img={p.imageUrl}
+									price={p.amount}
+									quantity={p.quantity}
+								/>
 							))}
 							<div className="flex flex-col gap-[10px] mt-[30px] items-end ">
-								<BodyBold>Total: ${total}</BodyBold>
+								<BodyBold>Total: ${totalToPay}</BodyBold>
 								<BlueButton onClick={handlePurcharse}>
 									Finalizar Compra
 								</BlueButton>

@@ -97,3 +97,81 @@ export async function getToken(email: string, code: number) {
 		throw error;
 	}
 }
+
+//guarda los datos personales
+export async function savedProfileData(
+	name: string,
+	lastName: string,
+	address: string
+) {
+	try {
+		const res = await fetchApi("/me", {
+			method: "PATCH",
+			body: {
+				name,
+				lastName,
+				address,
+			},
+		});
+		return res;
+	} catch (e) {
+		console.error("Error in savedProfileData:", e);
+		throw e;
+	}
+}
+
+////////carrito//////
+export async function addProductToCart(productId: string) {
+	try {
+		const res = await fetchApi("/cart", {
+			method: "POST",
+			body: {
+				productId,
+			},
+		});
+		return res;
+	} catch (e) {
+		console.error("Error in addProductToCart:", e);
+		throw e;
+	}
+}
+export async function deleteProductFromCart(productId: string) {
+	try {
+		const res = await fetchApi("/cart", {
+			method: "DELETE",
+			body: {
+				productId,
+			},
+		});
+		return res;
+	} catch (e) {
+		console.error("Error in deleteProductFromCart:", e);
+		throw e;
+	}
+}
+
+//deberia ir en un hook para que renueve los datos del nuevo carrito
+// export async function getProductsToCart() {
+// 	try {
+// 		const res = await fetchApi("/cart", {
+// 			method: "GET",
+// 		});
+// 		return res;
+// 	} catch (e) {
+// 		console.error("Error in gatProductsToCart:", e);
+// 		throw e;
+// 	}
+// }
+
+// //deberia ir en un hook para que renueve los datos de los viejos carritos
+// export async function getOldsCart() {
+// 	try {
+// 		const res = await fetchApi("/cart/history", {
+// 			method: "GET",
+// 		});
+// 		return res;
+// 	} catch (e) {
+// 		console.error("Error in gatProductsToCart:", e);
+// 		throw e;
+// 	}
+// }

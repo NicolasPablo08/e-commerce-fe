@@ -30,7 +30,7 @@ export default function SignIn() {
 		const res = await getToken(email, code);
 		//si devuelve true redirigimos
 		if (res) {
-			router.push("/");
+			router.push("/profile");
 		} else {
 			throw new Error("codigo invalido");
 		}
