@@ -13,6 +13,7 @@ import { Message } from "ui/message";
 import { DeleteIcon } from "ui/icons";
 import Link from "next/link";
 import { useState } from "react";
+import { deleteProductFromCart, addProductToCart } from "lib/api";
 type CardProps = {
 	img: string;
 	title: string;
@@ -56,7 +57,7 @@ export function ExtendedCard({
 	const data = useMe();
 	const isLoggedIn = data.data;
 
-	function handleBuy(e: any) {
+	async function handleBuy(e: any) {
 		e.preventDefault();
 		//verificar si estoy logueado, si no redirigir al login
 		if (!isLoggedIn) {
@@ -82,7 +83,23 @@ export function ExtendedCard({
 		}
 		//si ambos pasos anterirores son correctos proceder a agregar al carro
 		const quantity = e.target.quantity.value;
+		const res = await addProductToCart(id as string, quantity);
 		console.log("Comprar producto con id:", id, "cantidad:", quantity);
+		if (res.status === 200) {
+			setMessage("Producto agregado al carrito");
+			setShowMessage(true);
+			setTimeout(() => {
+				setShowMessage(false);
+				setMessage("");
+			}, 3000);
+		} else {
+			setMessage(res.message);
+			setShowMessage(true);
+			setTimeout(() => {
+				setShowMessage(false);
+				setMessage("");
+			}, 3000);
+		}
 	}
 	return (
 		<div>
@@ -140,10 +157,11 @@ export function ExtendedCard({
 	);
 }
 
-export function CartCard({ img, title, price, id, quantity }: CardProps) {
+export function CartCard({ img, title, id, price, quantity }: CardProps) {
 	const priceTotal = price * quantity;
-	async function deleteItem() {
-		console.log("item eliminado");
+	async function deleteItem(id: string) {
+		await deleteProductFromCart(id);
+		// console.log("item eliminado", id);
 	}
 	return (
 		<div className="py-2 px-2 w-[315px] h-[126px] border-[4px] border-black rounded-[8px] overflow-hidden cursor-pointer">
@@ -162,7 +180,10 @@ export function CartCard({ img, title, price, id, quantity }: CardProps) {
 					<div className="flex flex-row items-center justify-start px-[5px] gap-[10px] ">
 						<Tiny>Cant: {quantity}</Tiny>
 						<Tiny>Total: ${priceTotal}</Tiny>
-						<button className="text-[red]" onClick={deleteItem}>
+						<button
+							className="text-[red]"
+							onClick={() => deleteItem(id as string)}
+						>
 							<DeleteIcon />
 						</button>
 					</div>

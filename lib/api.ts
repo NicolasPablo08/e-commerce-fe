@@ -1,8 +1,8 @@
 "use client";
 import { mutate } from "swr";
 
-const BASE_URL = "https://desafio-ecommerce-be.onrender.com/api";
-
+// const BASE_URL = "https://desafio-ecommerce-be.onrender.com/api";
+const BASE_URL = "http://localhost:3000/api";
 export async function fetchApi(endpoint: string, options: any = {}) {
 	const url = BASE_URL + endpoint;
 	const token = getSavedToken();
@@ -121,12 +121,13 @@ export async function savedProfileData(
 }
 
 ////////carrito//////
-export async function addProductToCart(productId: string) {
+export async function addProductToCart(productId: string, quantity: number) {
 	try {
 		const res = await fetchApi("/cart", {
 			method: "POST",
 			body: {
 				productId,
+				quantity,
 			},
 		});
 		return res;
@@ -149,29 +150,15 @@ export async function deleteProductFromCart(productId: string) {
 		throw e;
 	}
 }
-
-//deberia ir en un hook para que renueve los datos del nuevo carrito
-// export async function getProductsToCart() {
-// 	try {
-// 		const res = await fetchApi("/cart", {
-// 			method: "GET",
-// 		});
-// 		return res;
-// 	} catch (e) {
-// 		console.error("Error in gatProductsToCart:", e);
-// 		throw e;
-// 	}
-// }
-
-// //deberia ir en un hook para que renueve los datos de los viejos carritos
-// export async function getOldsCart() {
-// 	try {
-// 		const res = await fetchApi("/cart/history", {
-// 			method: "GET",
-// 		});
-// 		return res;
-// 	} catch (e) {
-// 		console.error("Error in gatProductsToCart:", e);
-// 		throw e;
-// 	}
-// }
+//generar compra y redireccionar a mercadopago
+export async function createPurchase(cartId: string) {
+	try {
+		const res = await fetchApi(`/order?cartId=${cartId}`, {
+			method: "POST",
+		});
+		return res;
+	} catch (e) {
+		console.error("Error in createPurchase:", e);
+		throw e;
+	}
+}

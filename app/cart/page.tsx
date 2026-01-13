@@ -2,10 +2,10 @@
 import { Header } from "components/header";
 import { Footer } from "components/footer";
 import { SubTitle, Body, BodyBold } from "ui/typography";
-import { useState } from "react";
 import { CartCard } from "components/card";
 import { BlueButton } from "ui/buttons";
 import { useGetProductsToCart } from "lib/hooks";
+import { createPurchase } from "lib/api";
 
 export default function CartPage() {
 	const { data, error, isLoading } = useGetProductsToCart();
@@ -13,8 +13,13 @@ export default function CartPage() {
 		return total + product.quantity * product.amount;
 	}, 0);
 	console.log(totalToPay);
-	function handlePurcharse() {
-		console.log("finalizar compra0", data[0].cartId);
+	async function handlePurcharse() {
+		try {
+			const urlToPay = await createPurchase(data[0].cartId);
+			window.location.href = urlToPay;
+		} catch (e) {
+			console.error(e);
+		}
 	}
 	return (
 		<div>
@@ -31,6 +36,7 @@ export default function CartPage() {
 									img={p.imageUrl}
 									price={p.amount}
 									quantity={p.quantity}
+									id={p.objectID}
 								/>
 							))}
 							<div className="flex flex-col gap-[10px] mt-[30px] items-end ">
@@ -38,6 +44,9 @@ export default function CartPage() {
 								<BlueButton onClick={handlePurcharse}>
 									Finalizar Compra
 								</BlueButton>
+								<Body>
+									Te redireccionaremos a mercadopago para finalizar tu compra
+								</Body>
 							</div>
 						</div>
 					) : (
