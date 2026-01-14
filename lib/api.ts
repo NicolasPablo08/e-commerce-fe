@@ -121,13 +121,18 @@ export async function savedProfileData(
 }
 
 ////////carrito//////
-export async function addProductToCart(productId: string, quantity: number) {
+export async function addProductToCart(
+	productId: string,
+	quantity: number,
+	productName: string
+) {
 	try {
 		const res = await fetchApi("/cart", {
 			method: "POST",
 			body: {
 				productId,
 				quantity,
+				productName,
 			},
 		});
 		return res;

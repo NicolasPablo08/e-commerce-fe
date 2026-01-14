@@ -83,7 +83,7 @@ export function ExtendedCard({
 		}
 		//si ambos pasos anterirores son correctos proceder a agregar al carro
 		const quantity = e.target.quantity.value;
-		const res = await addProductToCart(id as string, quantity);
+		const res = await addProductToCart(id as string, quantity, title);
 		console.log("Comprar producto con id:", id, "cantidad:", quantity);
 		if (res.status === 200) {
 			setMessage("Producto agregado al carrito");
