@@ -1,8 +1,8 @@
 "use client";
 import { mutate } from "swr";
 
-// const BASE_URL = "https://desafio-ecommerce-be.onrender.com/api";
-const BASE_URL = "http://localhost:3000/api";
+const BASE_URL = "https://desafio-ecommerce-be.onrender.com/api";
+// const BASE_URL = "http://localhost:3000/api";
 export async function fetchApi(endpoint: string, options: any = {}) {
 	const url = BASE_URL + endpoint;
 	const token = getSavedToken();
