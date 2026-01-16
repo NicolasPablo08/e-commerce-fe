@@ -16,7 +16,9 @@ export default function CartPage() {
 	async function handlePurcharse() {
 		try {
 			const urlToPay = await createPurchase(data[0].cartId);
-			window.location.href = urlToPay;
+			// console.log(urlToPay.sandbox_init_point);
+
+			window.location.href = urlToPay.sandbox_init_point;
 		} catch (e) {
 			console.error(e);
 		}
