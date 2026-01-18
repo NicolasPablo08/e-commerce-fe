@@ -2,7 +2,7 @@
 import { Body } from "ui/typography";
 import { Card } from "components/card";
 import { Footer } from "components/footer";
-import { Header } from "components/header";
+import { HeaderSearch } from "components/headerWithSearchBar";
 import { useSearchParams } from "next/navigation";
 import { useSearchProducts } from "lib/hooks";
 import { useEffect, useState } from "react";
@@ -18,9 +18,14 @@ export default function SearchResults() {
   const [initialLoad, setInitialLoad] = useState(true); // para que loading solo se muestr en la llamad inicial
 
   const searchParams = useSearchParams();
-  const query = searchParams.get("query") || "";
+  const query = searchParams.get("query") || null;
   const { data, error, isLoading } = useSearchProducts(query, offset);
-  console.log(data?.results, isLoading);
+
+  // Reiniciar productos y offset cuando cambia la búsqueda
+  useEffect(() => {
+    setProducts([]); // Reiniciar productos
+    setOffset(0); // Reiniciar offset
+  }, [query]);
 
   // Cuando cambian los datos, acumulamos productos
   useEffect(() => {
@@ -38,7 +43,7 @@ export default function SearchResults() {
   }
   return (
     <div>
-      <Header />
+      <HeaderSearch />
       <div className="px-[40px] pt-[40px] pb-[150px] flex flex-col items-center">
         {isLoading && initialLoad ? (
           <Body>Cargando productos...</Body>

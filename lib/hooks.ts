@@ -29,33 +29,33 @@ import { useEffect, useState } from "react";
 // 	return { data, error, isLoading };
 // }
 export function useMe() {
-	const [token, setToken] = useState<string | null>(null);
-	const [mounted, setMounted] = useState(false);
+  const [token, setToken] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
 
-	useEffect(() => {
-		const savedToken = getSavedToken();
-		setToken(savedToken);
-		setMounted(true);
-	}, []);
+  useEffect(() => {
+    const savedToken = getSavedToken();
+    setToken(savedToken);
+    setMounted(true);
+  }, []);
 
-	const { data, error, isLoading } = useSWR(
-		token ? "/me" : null, // 👈 clave condicional
-		fetchApi
-	);
+  const { data, error, isLoading } = useSWR(
+    token ? "/me" : null, // 👈 clave condicional
+    fetchApi,
+  );
 
-	if (!mounted) {
-		return {
-			data: null,
-			error: null,
-			isLoading: false,
-		};
-	}
+  if (!mounted) {
+    return {
+      data: null,
+      error: null,
+      isLoading: false,
+    };
+  }
 
-	return {
-		data,
-		error,
-		isLoading,
-	};
+  return {
+    data,
+    error,
+    isLoading,
+  };
 }
 // export function useMe() {
 // 	const [token, setToken] = useState<string | null>(null);
@@ -78,41 +78,38 @@ export function useMe() {
 //SWRInmutable ya que la info del producto
 // no cambia y SWRInmutable no hara revalidaciones
 export function useSingleProduct(producId: string) {
-	const { data, error, isLoading } = useSWRImmutable(
-		`/products/${producId}`,
-		fetchApi
-	);
-	return { data, error, isLoading };
+  const { data, error, isLoading } = useSWRImmutable(`/products/${producId}`, fetchApi);
+  return { data, error, isLoading };
 }
 
 //obtener productos basados en una busqueda con SWRInmutable
 //ya que no son necesarias revalidaciones de los datos del producto
 export function useSearchProducts(query: string, offset: number) {
-	const { data, error, isLoading } = useSWRImmutable(
-		`/search?q=${query}&offset=${offset}&limit=8`,
-		fetchApi
-	);
+  const { data, error, isLoading } = useSWRImmutable(
+    `/search?q=${query}&offset=${offset}&limit=8`,
+    fetchApi,
+  );
 
-	return { data, error, isLoading };
+  return { data, error, isLoading };
 }
 //obtener todos los productos con SWRInmutable
 //y con ello luego elegir los destacados para el home
 export function useFeaturedProducts() {
-	const { data, error } = useSWRImmutable("/products", fetchApi);
-	//elegir dos o tres productos para mostrarlos como destacados
-	// sampleSize de lodash permite elegir n elementos aleatorios de un array
-	const destacados = sampleSize(data?.results, 2);
-	return destacados;
+  const { data, error } = useSWRImmutable("/products", fetchApi);
+  //elegir dos o tres productos para mostrarlos como destacados
+  // sampleSize de lodash permite elegir n elementos aleatorios de un array
+  const destacados = sampleSize(data?.results, 2);
+  return destacados;
 }
 
 //obtener los productos del carrito
 export function useGetProductsToCart() {
-	const { data, error, isLoading } = useSWR("/cart", fetchApi);
-	return { data, error, isLoading };
+  const { data, error, isLoading } = useSWR("/cart", fetchApi);
+  return { data, error, isLoading };
 }
 
 //obtener los carros pendientes y finalizados
 export function useGetOldsCart() {
-	const { data, error, isLoading } = useSWR("/cart/history", fetchApi);
-	return { data, error, isLoading };
+  const { data, error, isLoading } = useSWR("/order/history", fetchApi);
+  return { data, error, isLoading };
 }

@@ -3,25 +3,40 @@ import { Body, SubTitle, LargeText } from "ui/typography";
 import { useState } from "react";
 import { ShoppingCartIcon } from "ui/icons";
 import { MenuButtonIcon } from "ui/icons";
-import { FucsiaButton } from "ui/buttons";
+import { FucsiaButton, YellowButton } from "ui/buttons";
+import { logout } from "lib/api";
+import { useMe } from "lib/hooks";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export function HeaderSearch() {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const data = useMe();
+  const isLoggedIn = data?.data;
   function openMenu() {
     setMenuOpen(true);
   }
   function closeMenu() {
     setMenuOpen(false);
   }
-
+  function closeSession() {
+    // lógica para cerrar sesión y enviar a otra page
+    logout();
+    setMenuOpen(false);
+    router.push("/");
+  }
+  function handleSearch(e: any) {
+    e.preventDefault();
+    const query = e.target.search.value;
+    router.push("/search?query=" + query);
+  }
   return (
-    <header className="w-[100%] h-[84px] bg-[black] ">
+    <header className="w-[100%] bg-[black] pt-[15px]">
       <div className="px-[20px] flex justify-between items-center w-[100%] h-[100%] relative ">
-        <ShoppingCartIcon className="text-[white]" />
+        <Link href="/">
+          <ShoppingCartIcon className="text-[white]" />
+        </Link>
         {isLoggedIn ? (
           <button onClick={openMenu}>
             <MenuButtonIcon className="text-[white]" />
@@ -37,25 +52,45 @@ export function HeaderSearch() {
               X
             </button>
           </div>
-          <div className="flex flex-col gap-[50px] text-center">
-            <Link href="/signin" passHref>
-              <SubTitle>ingresar</SubTitle>
+          <div className="flex flex-col gap-[40px] text-center">
+            <Link href="/search" passHref>
+              <SubTitle onClick={closeMenu}>Buscar</SubTitle>
+            </Link>
+            <Link href="/cart" passHref>
+              <SubTitle onClick={closeMenu}>Carrito</SubTitle>
+            </Link>
+            <Link href="/history" passHref>
+              <SubTitle onClick={closeMenu}>Pedidos</SubTitle>
             </Link>
             <Link href="/profile" passHref>
-              <SubTitle>Mi perfil</SubTitle>
-            </Link>
-            <Link href="/search" passHref>
-              <SubTitle>Buscar</SubTitle>
+              <SubTitle onClick={closeMenu}>Mi perfil</SubTitle>
             </Link>
           </div>
-          <div className="flex flex-col gap-[20px] text-center">
-            <Body>miEmail@email</Body>
-            <Link href="/" passHref>
-              <LargeText className="text-[var(--fucsia-A200)]">Cerrar sesión</LargeText>
-            </Link>
+          <div className="flex flex-col gap-[15px] text-center">
+            <Body>{data.data.email}</Body>
+            <LargeText className="text-[var(--fucsia-A200)]" onClick={closeSession}>
+              Cerrar sesión
+            </LargeText>
           </div>
         </div>
       )}
+      <div className="w-[100%] h-[138px]">
+        <form
+          action=""
+          className="w-[100%] h-[100%] flex flex-col gap-[15px] justify-center items-center"
+          onSubmit={handleSearch}
+        >
+          <input
+            type="text"
+            placeholder="Buscar"
+            name="search"
+            className="w-[328px] h-[36px] border-[3px] border-white rounded-[8px] text-white pl-[5px]"
+          />
+          <YellowButton type="submit" className="w-[328px] h-[36px]">
+            Buscar
+          </YellowButton>
+        </form>
+      </div>
     </header>
   );
 }
