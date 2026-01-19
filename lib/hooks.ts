@@ -28,35 +28,59 @@ import { useEffect, useState } from "react";
 
 // 	return { data, error, isLoading };
 // }
+// useMe con cambios para hacerlo mas rapido
 export function useMe() {
-  const [token, setToken] = useState<string | null>(null);
-  const [mounted, setMounted] = useState(false);
+  // Leemos el token directamente al inicializar, si estamos en el cliente
+  const [token] = useState(() => {
+    if (typeof window !== "undefined") {
+      return getSavedToken();
+    }
+    return null;
+  });
 
-  useEffect(() => {
-    const savedToken = getSavedToken();
-    setToken(savedToken);
-    setMounted(true);
-  }, []);
-
-  const { data, error, isLoading } = useSWR(
-    token ? "/me" : null, // 👈 clave condicional
-    fetchApi,
-  );
-
-  if (!mounted) {
-    return {
-      data: null,
-      error: null,
-      isLoading: false,
-    };
-  }
+  const { data, error, isLoading } = useSWR(token ? "/me" : null, fetchApi, {
+    // Configuraciones para que sea más rápido
+    revalidateOnFocus: false,
+    shouldRetryOnError: false,
+  });
 
   return {
     data,
     error,
     isLoading,
+    isLogged: !!data, // Helper extra
   };
 }
+// useMe viejo
+// export function useMe() {
+//   const [token, setToken] = useState<string | null>(null);
+//   const [mounted, setMounted] = useState(false);
+
+//   useEffect(() => {
+//     const savedToken = getSavedToken();
+//     setToken(savedToken);
+//     setMounted(true);
+//   }, []);
+
+//   const { data, error, isLoading } = useSWR(
+//     token ? "/me" : null, // 👈 clave condicional
+//     fetchApi,
+//   );
+
+//   if (!mounted) {
+//     return {
+//       data: null,
+//       error: null,
+//       isLoading: false,
+//     };
+//   }
+
+//   return {
+//     data,
+//     error,
+//     isLoading,
+//   };
+// }
 // export function useMe() {
 // 	const [token, setToken] = useState<string | null>(null);
 
