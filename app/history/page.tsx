@@ -1,5 +1,5 @@
 "use client";
-import { HeaderSearch } from "@/components/headerWithSearchBar";
+import { HeaderSearch } from "components/header-witch-search";
 import { Footer } from "components/footer";
 import { useGetOldsCart } from "lib/hooks";
 import { Order } from "components/order";

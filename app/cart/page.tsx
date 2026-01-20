@@ -1,5 +1,5 @@
 "use client";
-import { HeaderSearch } from "@/components/headerWithSearchBar";
+import { HeaderSearch } from "components/header-witch-search";
 import { Footer } from "components/footer";
 import { SubTitle, Body, BodyBold } from "ui/typography";
 import { CartCard } from "components/card";

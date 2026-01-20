@@ -2,7 +2,7 @@
 import { Body } from "ui/typography";
 import { Card } from "components/card";
 import { Footer } from "components/footer";
-import { HeaderSearch } from "@/components/headerWithSearchBar";
+import { HeaderSearch } from "components/header-witch-search";
 import { useSearchParams } from "next/navigation";
 import { useSearchProducts } from "lib/hooks";
 import { Suspense, useEffect, useState } from "react";
