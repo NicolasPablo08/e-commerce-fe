@@ -40,43 +40,43 @@ export default function SignIn() {
 		<div>
 			<Header />
 			{step === "email" ? (
-				<div className={`pt-[30px] pb-[66px] items-center  flex-col flex`}>
+				<div className={`pt-[70px] pb-[110px] items-center flex-col flex`}>
 					<form onSubmit={handleEmail} className="flex flex-col gap-[10px]">
-						<div>
+						<div className="xl:text-center">
 							<SubTitle>Ingresar</SubTitle>
 						</div>
 						<TextField
 							name="email"
 							type="email"
 							placeholder="jose@mail.com"
-							className="w-[253px] text-center"
+							className="w-[333px] text-center"
 							value={email}
 							onChange={handleEmailChange}
 						>
 							Email
 						</TextField>
-						<YellowButton type="submit" className="w-[253px]">
+						<YellowButton type="submit" className="w-[333px]">
 							Continuar
 						</YellowButton>
 					</form>
 				</div>
 			) : (
-				<div className={`pt-[30px] pb-[66px] items-center flex-col flex`}>
+				<div className={`pt-[70px] pb-[110px] items-center flex-col flex`}>
 					<form onSubmit={handleCode} className="flex flex-col gap-[10px]">
-						<div>
+						<div className="xl:text-center">
 							<SubTitle>Código</SubTitle>
 						</div>
 						<TextField
 							name="code"
 							type="text"
 							placeholder="12345"
-							className="w-[253px] text-center"
+							className="w-[333px] text-center"
 							value={initialCode}
 							onChange={(e) => setInitialCode(e.target.value)}
 						>
 							Ingresa el código que enviamos a tu email
 						</TextField>
-						<YellowButton type="submit" className="w-[253px]">
+						<YellowButton type="submit" className="w-[333px]">
 							Ingresar
 						</YellowButton>
 					</form>
