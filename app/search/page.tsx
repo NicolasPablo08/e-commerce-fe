@@ -5,78 +5,92 @@ import { Footer } from "components/footer";
 import { HeaderSearch } from "@/components/headerWithSearchBar";
 import { useSearchParams } from "next/navigation";
 import { useSearchProducts } from "lib/hooks";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 type Product = {
-  objectID: string;
-  imageUrl: string;
-  name: string;
-  amount: number;
+	objectID: string;
+	imageUrl: string;
+	name: string;
+	amount: number;
 };
+function SearchContent() {
+	const [offset, setOffset] = useState(0); // offset inicial
+	const [products, setProducts] = useState<Product[]>([]); //para ir acumulando los productos
+	const [initialLoad, setInitialLoad] = useState(true); // para que loading solo se muestr en la llamad inicial
+
+	const searchParams = useSearchParams();
+	const query = searchParams.get("query") || null;
+	const { data, error, isLoading } = useSearchProducts(query as string, offset);
+
+	// Reiniciar productos y offset cuando cambia la búsqueda
+	useEffect(() => {
+		setProducts([]); // Reiniciar productos
+		setOffset(0); // Reiniciar offset
+	}, [query]);
+
+	// Cuando cambian los datos, acumulamos productos
+	useEffect(() => {
+		if (data?.results) {
+			setProducts((prev: Product[]) => [...prev, ...data.results]);
+			setInitialLoad(false);
+		}
+	}, [data?.results]);
+
+	const total = data?.pagination?.total || "";
+	const viewingProducts = products.length;
+
+	function handleNewProducts() {
+		setOffset((prevOffset) => prevOffset + 4); // aumentamos el offset en 4 para cargar más productos
+	}
+	return (
+		<div className="flex flex-col min-h-screen">
+			<HeaderSearch />
+			<div className="px-[40px] pt-[40px] pb-[150px] flex flex-col flex-grow items-center">
+				{isLoading && initialLoad ? (
+					<Body>Cargando productos...</Body>
+				) : data?.pagination?.total == 0 ? (
+					<Body className="max-w-[350px]">
+						No se encotraron productos relacionados a la busqueda, intenta con
+						otra palabra.
+					</Body>
+				) : (
+					<div className="flex flex-col gap-[20px]">
+						<Body>{`Mostrando ${viewingProducts} productos de ${total}`}</Body>
+						<div className="flex flex-col gap-[20px] xl:grid xl:grid-cols-2 xl:gap-x-[50px] xl:gap-y-[50px]">
+							{products.map((p: any) => (
+								<Card
+									key={p.objectID}
+									img={p.imageUrl}
+									title={p.name}
+									price={p.amount}
+									id={p.objectID}
+								/>
+							))}
+						</div>
+						{viewingProducts < total && (
+							<button
+								onClick={handleNewProducts}
+								className="text-[blue] pointer-cursor bg-[transparent] border-[none] mt-[20px]"
+							>
+								{"Ver más >"}
+							</button>
+						)}
+					</div>
+				)}
+			</div>
+			<Footer />
+		</div>
+	);
+}
+
+//suspense y esta forma es siempre necesario cuando
+//utilizo useSearchProducts
+// El export default envuelve todo en Suspense
 export default function SearchResults() {
-  const [offset, setOffset] = useState(0); // offset inicial
-  const [products, setProducts] = useState<Product[]>([]); //para ir acumulando los productos
-  const [initialLoad, setInitialLoad] = useState(true); // para que loading solo se muestr en la llamad inicial
-
-  const searchParams = useSearchParams();
-  const query = searchParams.get("query") || null;
-  const { data, error, isLoading } = useSearchProducts(query as string, offset);
-
-  // Reiniciar productos y offset cuando cambia la búsqueda
-  useEffect(() => {
-    setProducts([]); // Reiniciar productos
-    setOffset(0); // Reiniciar offset
-  }, [query]);
-
-  // Cuando cambian los datos, acumulamos productos
-  useEffect(() => {
-    if (data?.results) {
-      setProducts((prev: Product[]) => [...prev, ...data.results]);
-      setInitialLoad(false);
-    }
-  }, [data?.results]);
-
-  const total = data?.pagination?.total || "";
-  const viewingProducts = products.length;
-
-  function handleNewProducts() {
-    setOffset((prevOffset) => prevOffset + 4); // aumentamos el offset en 4 para cargar más productos
-  }
-  return (
-    <div className="flex flex-col min-h-screen">
-      <HeaderSearch />
-      <div className="px-[40px] pt-[40px] pb-[150px] flex flex-col flex-grow items-center">
-        {isLoading && initialLoad ? (
-          <Body>Cargando productos...</Body>
-        ) : data?.pagination?.total == 0 ? (
-          <Body className="max-w-[350px]">
-            No se encotraron productos relacionados a la busqueda, intenta con otra palabra.
-          </Body>
-        ) : (
-          <div className="flex flex-col gap-[20px]">
-            <Body>{`Mostrando ${viewingProducts} productos de ${total}`}</Body>
-            <div className="flex flex-col gap-[20px] xl:grid xl:grid-cols-2 xl:gap-x-[50px] xl:gap-y-[50px]">
-              {products.map((p: any) => (
-                <Card
-                  key={p.objectID}
-                  img={p.imageUrl}
-                  title={p.name}
-                  price={p.amount}
-                  id={p.objectID}
-                />
-              ))}
-            </div>
-            {viewingProducts < total && (
-              <button
-                onClick={handleNewProducts}
-                className="text-[blue] pointer-cursor bg-[transparent] border-[none] mt-[20px]"
-              >
-                {"Ver más >"}
-              </button>
-            )}
-          </div>
-        )}
-      </div>
-      <Footer />
-    </div>
-  );
+	return (
+		<div className="flex flex-col min-h-screen">
+			<Suspense fallback={<div>Cargando buscador...</div>}>
+				<SearchContent />
+			</Suspense>
+		</div>
+	);
 }
