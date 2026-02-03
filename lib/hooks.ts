@@ -5,9 +5,8 @@ import useSWRImmutable from "swr/immutable";
 import sampleSize from "lodash.samplesize";
 import { useState } from "react";
 
-// useMe con cambios para hacerlo mas rapido
 export function useMe() {
-  // Leemos el token directamente al inicializar, si estamos en el cliente
+  // Leemos el token directamente al inicializar
   const [token] = useState(() => {
     if (typeof window !== "undefined") {
       return getSavedToken();
@@ -63,7 +62,7 @@ export function useGetProductsToCart() {
   return { data, error, isLoading };
 }
 
-//obtener los carros pendientes y finalizados
+//obtener ordenes pendientes y finalizados
 export function useGetOldsCart() {
   const { data, error, isLoading } = useSWR("/order/history", fetchApi);
   return { data, error, isLoading };

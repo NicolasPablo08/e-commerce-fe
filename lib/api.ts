@@ -48,27 +48,16 @@ export async function fetchApi(endpoint: string, options: any = {}) {
   }
 }
 
-//obtener token del localStorage
+//obtener el token de las cookies
 export function getSavedToken() {
-  // if (typeof window === "undefined") {
-  //   // Verificamos si estamos en el navegador
-  //   return null; // Retornamos null si estamos en el servidor
-  // }
-  // return localStorage.getItem("auth_token");
-  // // const token = localStorage.getItem("auth_token");
-  // // return token;
   return Cookies.get(TOKEN_KEY) || null;
 }
-//guardar token en el localStorage
+//guardar el token en las cookies
 export function savedToken(token: string) {
-  // localStorage.setItem("auth_token", token);
   Cookies.set(TOKEN_KEY, token, cookieConfig);
 }
-//eliminar token del localStorage para el logout
+//eliminar el token de las cookies para el logout
 export function removeToken() {
-  // if (typeof window !== "undefined") {
-  //   localStorage.removeItem("auth_token");
-  // }
   Cookies.remove(TOKEN_KEY);
 }
 //deslogueo
