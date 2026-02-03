@@ -3,31 +3,8 @@ import { fetchApi, getSavedToken } from "lib/api";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import sampleSize from "lodash.samplesize";
-import { atom, useAtom } from "jotai";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-// export const productsFromSearchAtom = atom([]);
-// const [products, setProducts] = useAtom(productsFromSearchAtom);
-//actualizar siempre el atomo en un useEffect para evitar loops infinitos
-//  useEffect(() => {
-//     if (data?.results) {
-//       setProducts(data.results);
-//     }
-//   }, [data, setProducts]);
-
-//obeter la data de un ususario logueado con SWR
-// que hara revalidaciones por si cambia los datos del user
-//fetchApi obtendra el token del localStorage
-
-// export function useMe() {
-// 	const token = getSavedToken();
-// 	if (!token) {
-// 		return null;
-// 	}
-// 	const { data, error, isLoading } = useSWR("/me", fetchApi);
-
-// 	return { data, error, isLoading };
-// }
 // useMe con cambios para hacerlo mas rapido
 export function useMe() {
   // Leemos el token directamente al inicializar, si estamos en el cliente
@@ -51,52 +28,6 @@ export function useMe() {
     isLogged: !!data, // Helper extra
   };
 }
-// useMe viejo
-// export function useMe() {
-//   const [token, setToken] = useState<string | null>(null);
-//   const [mounted, setMounted] = useState(false);
-
-//   useEffect(() => {
-//     const savedToken = getSavedToken();
-//     setToken(savedToken);
-//     setMounted(true);
-//   }, []);
-
-//   const { data, error, isLoading } = useSWR(
-//     token ? "/me" : null, // 👈 clave condicional
-//     fetchApi,
-//   );
-
-//   if (!mounted) {
-//     return {
-//       data: null,
-//       error: null,
-//       isLoading: false,
-//     };
-//   }
-
-//   return {
-//     data,
-//     error,
-//     isLoading,
-//   };
-// }
-// export function useMe() {
-// 	const [token, setToken] = useState<string | null>(null);
-
-// 	useEffect(() => {
-// 		const savedToken = getSavedToken();
-// 		setToken(savedToken);
-// 	}, []); // Solo se ejecuta una vez al montar el componente
-
-// 	if (!token) {
-// 		return null; // Retorna null si no hay token
-// 	}
-
-// 	const { data, error, isLoading } = useSWR("/me", fetchApi);
-
-// 	return { data, error, isLoading };
-// }
 
 //obtener un producto por su id, utilizaremos
 //SWRInmutable ya que la info del producto

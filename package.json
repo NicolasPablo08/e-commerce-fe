@@ -10,7 +10,6 @@
 	},
 	"dependencies": {
 		"@svgr/webpack": "^8.1.0",
-		"jotai": "^2.16.1",
 		"js-cookie": "^3.0.5",
 		"lodash.groupby": "^4.6.0",
 		"lodash.samplesize": "^4.2.0",
