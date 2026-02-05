@@ -1,7 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 
-// 1. SEO: Usamos el objeto Metadata (la forma oficial de Next.js)
+// Usamos el objeto Metadata (la forma oficial de Next.js)
 // Esto reemplaza la etiqueta <title> manual y es lo que Google lee.
 export const metadata: Metadata = {
   title: {

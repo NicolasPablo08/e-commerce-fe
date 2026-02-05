@@ -59,7 +59,6 @@ export function ExtendedCard({ img, title, price, id, description, stock }: Card
     //si estoy logueado proceder a agregar al carro
     const quantity = e.target.quantity.value;
     const res = await addProductToCart(id as string, quantity, title);
-    console.log("Comprar producto con id:", id, "cantidad:", quantity);
     if (res.status === 200) {
       setMessage("Producto agregado al carrito");
       setShowMessage(true);

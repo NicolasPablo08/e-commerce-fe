@@ -18,15 +18,13 @@ export default function SignIn() {
 
   function handleEmail(e: any) {
     e.preventDefault();
-    const emailValue = e.target.email.value;
-    console.log(email);
+    // const emailValue = e.target.email.value;
     sendCode(email);
     setStep("code");
   }
   async function handleCode(e: any) {
     e.preventDefault();
     const code = e.target.code.value;
-    // console.log(code);
     const res = await getToken(email, code);
     //si devuelve true redirigimos
     if (res) {
